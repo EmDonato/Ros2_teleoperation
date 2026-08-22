@@ -3,8 +3,8 @@ services:
     image: robot-modules/teleoperation:humble
 
     build:
-      context: ../..
-      dockerfile: modules/teleoperation/Dockerfile
+      context: ..
+      dockerfile: teleoperation/Dockerfile
 
     network_mode: host
 
