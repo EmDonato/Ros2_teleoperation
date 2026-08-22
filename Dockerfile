@@ -2,6 +2,14 @@ FROM ros:humble-ros-base-jammy
 
 SHELL ["/bin/bash", "-c"]
 
+ARG USERNAME=joy
+ARG UID=1000
+ARG GID=1000
+
+
+RUN groupadd -g ${GID} ${USERNAME} && \
+    useradd -m -u ${UID} -g ${GID} -s /bin/bash ${USERNAME}
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     cmake \
