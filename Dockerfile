@@ -23,5 +23,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 COPY --from=builder /ws/install /opt/robot_module
 COPY teleoperation/docker-entrypoint.sh /ros_module_entrypoint.sh
+RUN chmod +x /ros_module_entrypoint.sh
+WORKDIR /teleoperation
 ENTRYPOINT ["/ros_module_entrypoint.sh"]
 CMD ["sleep", "infinity"]
