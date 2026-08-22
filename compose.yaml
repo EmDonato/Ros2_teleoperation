@@ -1,13 +1,18 @@
 services:
   teleoperation:
     image: robot-modules/teleoperation:humble
+
     build:
-      context: ..
-      dockerfile: teleoperation/Dockerfile
+      context: ../..
+      dockerfile: modules/teleoperation/Dockerfile
+
     network_mode: host
+
     volumes:
       - /dev/input:/dev/input
+
     environment:
       RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
       ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-0}
-    command: sleep infinity
+
+    command: ros2 launch joy_bringup joy_launch.py
