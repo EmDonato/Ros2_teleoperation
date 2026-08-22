@@ -27,7 +27,7 @@ public:
         );
 
         sub_ = this->create_subscription<geometry_msgs::msg::Twist>(
-            "/joy/cmd_vel",
+            "cmd_vel/raw",
             rclcpp::SensorDataQoS(),
             std::bind(&JoyVelRef::send_vel_twist_, this, std::placeholders::_1)
         );
