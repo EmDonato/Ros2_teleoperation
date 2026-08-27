@@ -1,10 +1,10 @@
 services:
   open-pi-joystick:
     image: open-pi-joystick-img
+    container_name: open-pi-joystick
     build:
       context: .
       dockerfile: Dockerfile
-      container_name: open-pi-joystick
       additional_contexts:
         interfaces: ../../interfaces
 
