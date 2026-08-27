@@ -22,16 +22,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /ws
 
 COPY src/ src/
+COPY config/ config/
 COPY --from=interfaces /src/robot_interfaces src/robot_interfaces/
 
-RUN source /opt/ros/humble/setup.bash && \
-    colcon build --merge-install \
+RUN source /opt/ros/${ROS_DISTRO}/setup.bash && \
+    colcon build \
+        --merge-install \
         --cmake-args -DCMAKE_BUILD_TYPE=Release
 
 COPY docker-entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
-
-ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 
 ENTRYPOINT ["/entrypoint.sh"]
 

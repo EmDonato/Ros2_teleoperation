@@ -10,7 +10,7 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
 
-    workspace_config_path = '/root/ws/config/params.yaml'
+    workspace_config_path = './config/params.yaml'
 
     ld = LaunchDescription()
 

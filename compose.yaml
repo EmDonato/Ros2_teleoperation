@@ -1,19 +1,19 @@
 services:
-  teleoperation:
-    image: robot-modules/teleoperation:humble
-
+  open-pi-joystick:
+    image: open-pi-joystick-img
     build:
       context: .
       dockerfile: Dockerfile
+      container_name: open-pi-joystick
       additional_contexts:
-        interfaces: ../interfaces
+        interfaces: ../../interfaces
 
     network_mode: host
     privileged: true
 
     volumes:
       - /dev/input:/dev/input
-      - ./:/teleoperation
+      - ./:/open-Pi_joystick
 
     environment:
       RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
