@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 @file joy_launch.py
-@brief Launch file for joystick teleoperation, they create button service and velocity references.
+@brief Launch file for joystick teleoperation.
 """
 
 from launch import LaunchDescription
@@ -10,7 +10,7 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
 
-    workspace_config_path = './config/params.yaml'
+    workspace_config_path = '../../config/params.yaml'
 
     ld = LaunchDescription()
 
@@ -21,7 +21,14 @@ def generate_launch_description():
             package='joy',
             executable='joy_node',
             name='joy',
-            parameters=[workspace_config_path],
+            parameters=[
+                workspace_config_path,
+                {
+                    'qos_overrides./joy.publisher.reliability': 'best_effort',
+                    'qos_overrides./joy.publisher.history': 'keep_last',
+                    'qos_overrides./joy.publisher.depth': 1,
+                }
+            ],
             output='screen',
             respawn=True,
             respawn_delay=2.0
@@ -35,8 +42,21 @@ def generate_launch_description():
             package='teleop_twist_joy',
             executable='teleop_node',
             name='teleop_twist_joy',
-            parameters=[workspace_config_path],
-            remappings=[('/cmd_vel', '/cmd_vel/raw')],
+            parameters=[
+                workspace_config_path,
+                {
+                    'qos_overrides./joy.subscription.reliability': 'best_effort',
+                    'qos_overrides./joy.subscription.history': 'keep_last',
+                    'qos_overrides./joy.subscription.depth': 1,
+
+                    'qos_overrides./cmd_vel.publisher.reliability': 'best_effort',
+                    'qos_overrides./cmd_vel.publisher.history': 'keep_last',
+                    'qos_overrides./cmd_vel.publisher.depth': 1,
+                }
+            ],
+            remappings=[
+                ('/cmd_vel', '/cmd_vel/raw')
+            ],
             output='screen'
         )
     )
