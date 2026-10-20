@@ -1,18 +1,25 @@
 #!/usr/bin/env python3
-"""
-@file joy_launch.py
-@brief Launch file for joystick teleoperation, they create button service and velocity references.
-"""
+"""Launch joystick input, button services, and velocity references."""
 
+import os
+
+from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
 
 def generate_launch_description():
 
-    workspace_config_path = '../../config/params.yaml'
+    workspace_config_path = LaunchConfiguration('config_file')
 
     ld = LaunchDescription()
+    ld.add_action(DeclareLaunchArgument(
+        'config_file',
+        default_value=os.path.join(
+            get_package_share_directory('joy_bringup'), 'config', 'params.yaml'),
+        description='Joystick and velocity-control parameters'))
 
     # -----------------------------------------------------------------------
     # Joystick driver
