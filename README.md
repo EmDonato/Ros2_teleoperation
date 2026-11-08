@@ -41,3 +41,6 @@ Run the hardware-free installed-configuration and joystick pipeline test with:
     docker run --rm --network none -e ROS_DOMAIN_ID=173 \
       -v "$PWD/tests:/tests:ro" open-pi-joystick-img:jazzy \
       python3 /tests/smoke_launch.py
+
+The container forwards SIGINT on stop and allows 20 seconds for ROS to exit
+before Docker forces termination. This also applies when used by the playground.
