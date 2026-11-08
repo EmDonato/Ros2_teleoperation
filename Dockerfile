@@ -1,4 +1,4 @@
-FROM ros:humble-ros-base-jammy
+FROM ros:jazzy-ros-base-noble
 
 SHELL ["/bin/bash", "-c"]
 
@@ -7,16 +7,18 @@ ARG UID=1000
 ARG GID=1000
 
 
-RUN groupadd -g ${GID} ${USERNAME} && \
+# Noble reserves UID/GID 1000 for its default ubuntu account.
+RUN if id ubuntu >/dev/null 2>&1; then userdel -r ubuntu; fi && \
+    groupadd -g ${GID} ${USERNAME} && \
     useradd -m -u ${UID} -g ${GID} -s /bin/bash ${USERNAME}
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     cmake \
     python3-colcon-common-extensions \
-    ros-humble-rmw-cyclonedds-cpp \
-    ros-humble-joy \
-    ros-humble-teleop-twist-joy \
+    ros-jazzy-rmw-cyclonedds-cpp \
+    ros-jazzy-joy \
+    ros-jazzy-teleop-twist-joy \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /ws

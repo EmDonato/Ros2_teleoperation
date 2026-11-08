@@ -1,6 +1,7 @@
 services:
   open-pi-joystick:
-    image: open-pi-joystick-img
+    image: open-pi-joystick-img:jazzy
+    platform: ${ROBOT_PLATFORM:-linux/arm64}
     container_name: open-pi-joystick
     build:
       context: .
