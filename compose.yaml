@@ -14,9 +14,15 @@ services:
     volumes:
       - /dev/input:/dev/input
       - ./:/open-Pi_joystick
+      - ${PIROBOT_TELEOP_CONFIG:-./config/params.yaml}:/ws/config/params.yaml:ro
 
     environment:
       RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
       ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-0}
 
-    command: ros2 launch joy_bringup joy_launch.py
+    command:
+      - ros2
+      - launch
+      - joy_bringup
+      - teleoperation.launch.py
+      - config_file:=/ws/config/params.yaml

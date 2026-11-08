@@ -1,15 +1,25 @@
 # Teleoperation
 
-This module contains:
-
-- `joy_service_node`, which converts button presses into `robot_interfaces/srv/ControlCommand` requests;
-- `joy_teleop_twist_ref`, which bounds and converts velocity commands for a differential-drive base;
-- the standard ROS 2 `joy` node, installed in the image.
-
-The default control service is `control/command`. The robot-specific bringup can override button mappings, maximum speed, wheel base, service name, and topics.
+ROS 2 joystick control for Open PiRobot. The module starts its own Docker container
+and launches the joystick driver, normalized command conversion and wheel mixing.
 
 ```bash
-docker compose -f teleoperation/compose.yaml build
-docker compose -f teleoperation/compose.yaml up -d
-docker compose -f teleoperation/compose.yaml exec teleoperation ros2 run joy joy_node
+bash joystick.sh build
+bash joystick.sh create
+bash joystick.sh stop
 ```
+
+`create` requires a joystick in `/dev/input/js*`. Use `status` and `logs` to inspect
+the container. The default configuration is `config/params.yaml`; hold L1 (button 9)
+while moving the sticks to publish velocity commands. Topics and controller settings
+are defined in that YAML. The `joy_bringup` package provides
+`teleoperation.launch.py` with `config_file` and optional `use_sim_time` arguments.
+
+Compose mounts the configuration as `/ws/config/params.yaml`.
+`PIROBOT_TELEOP_CONFIG` selects another parameter file, including the temporary
+config prepared by the simulation workspace. The workspace calls `joystick.sh`;
+ROS nodes run inside this module's container.
+
+Set `use_sim_time` in the module YAML for standalone operation: `false` uses the
+system clock and `true` subscribes to `/clock`. The simulation workspace's
+`runtime.use_sim_time` overrides the temporary config; `null` preserves module defaults.
